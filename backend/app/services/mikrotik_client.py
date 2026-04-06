@@ -23,7 +23,7 @@ class RouterOSClient:
     def __init__(self, device: Device):
         self.device = device
         scheme = "https" if device.use_ssl else "http"
-        self.base_url = f"{scheme}://{device.host}:{device.port}/rest"
+        self.base_url = f"{scheme}://{device.host}:{device.api_port}/rest"
         self.username = device.username
         self.password = decrypt_credential(device.password_encrypted)
 

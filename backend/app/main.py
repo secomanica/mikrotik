@@ -8,7 +8,7 @@ from app.core.config import settings
 from app.core.database import init_db, async_session
 from app.core.security import get_password_hash
 from app.models.user import User, UserRole
-from app.api.routes import auth, users, devices, routeros_proxy, monitoring, tools, audit
+from app.api.routes import auth, users, devices, routeros_proxy, monitoring, tools, audit, clients, vpn_tunnels
 
 
 @asynccontextmanager
@@ -59,6 +59,8 @@ app.include_router(routeros_proxy.router, prefix="/api")
 app.include_router(monitoring.router, prefix="/api")
 app.include_router(tools.router, prefix="/api")
 app.include_router(audit.router, prefix="/api")
+app.include_router(clients.router, prefix="/api")
+app.include_router(vpn_tunnels.router, prefix="/api")
 
 
 @app.get("/api/health")

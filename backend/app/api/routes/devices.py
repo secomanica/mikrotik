@@ -9,6 +9,7 @@ from app.middleware.auth import get_current_user, require_write, require_admin
 from app.models.user import User, UserRole
 from app.models.device import Device
 from app.schemas.device import DeviceCreate, DeviceUpdate, DeviceResponse, DeviceStatus
+from app.models.client import Client
 from app.services.mikrotik_client import RouterOSClient
 from app.services.audit_service import log_action
 
@@ -17,11 +18,27 @@ router = APIRouter(prefix="/devices", tags=["Dispositivos"])
 
 @router.get("", response_model=list[DeviceResponse])
 async def list_devices(
+    client_id: int | None = None,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(Device).order_by(Device.name))
-    return result.scalars().all()
+    query = select(Device).order_by(Device.name)
+    if client_id is not None:
+        query = query.where(Device.client_id == client_id)
+    result = await db.execute(query)
+    devices = result.scalars().all()
+
+    # Enrich with client names
+    response = []
+    for device in devices:
+        device_dict = DeviceResponse.model_validate(device)
+        if device.client_id:
+            client_result = await db.execute(select(Client).where(Client.id == device.client_id))
+            client = client_result.scalar_one_or_none()
+            if client:
+                device_dict.client_name = client.name
+        response.append(device_dict)
+    return response
 
 
 @router.post("", response_model=DeviceResponse, status_code=status.HTTP_201_CREATED)
@@ -32,11 +49,15 @@ async def create_device(
 ):
     device = Device(
         name=device_data.name,
+        client_id=device_data.client_id,
         host=device_data.host,
-        port=device_data.port,
+        api_port=device_data.api_port,
         use_ssl=device_data.use_ssl,
         username=device_data.username,
         password_encrypted=encrypt_credential(device_data.password),
+        public_ip=device_data.public_ip,
+        ssh_port=device_data.ssh_port,
+        winbox_port=device_data.winbox_port,
         notes=device_data.notes,
         created_by=current_user.id,
     )

@@ -53,7 +53,7 @@ function DeviceCard({ device }: { device: Device }) {
         </Box>
 
         <Typography variant="body2" color="text.secondary" gutterBottom>
-          {device.host}:{device.port}
+          {device.host}:{device.api_port}
         </Typography>
 
         {isLoading ? (

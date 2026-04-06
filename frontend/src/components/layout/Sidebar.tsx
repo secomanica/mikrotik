@@ -7,7 +7,7 @@ import {
 import {
   Dashboard, Router, People, Security, Language, SwapHoriz, Storage,
   Speed, Dns, Wifi, VpnKey, Build, Assessment, Description,
-  ExpandLess, ExpandMore, Fireplace, Settings, History,
+  ExpandLess, ExpandMore, Fireplace, Settings, History, Business,
 } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -38,6 +38,7 @@ export default function Sidebar({ drawerWidth, mobileOpen, onClose }: SidebarPro
 
   const mainNavItems: NavItem[] = [
     { label: 'Dashboard', icon: <Dashboard />, path: '/' },
+    { label: 'Clientes', icon: <Business />, path: '/clients' },
     { label: 'Dispositivos', icon: <Router />, path: '/devices' },
     ...(isAdmin ? [
       { label: 'Usuários', icon: <People />, path: '/users' },

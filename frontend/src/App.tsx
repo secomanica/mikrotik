@@ -12,6 +12,8 @@ import AuditPage from './pages/AuditPage';
 import GenericResourcePage from './pages/GenericResourcePage';
 import ToolsPage from './pages/ToolsPage';
 import DeviceLogsPage from './pages/DeviceLogsPage';
+import ClientsPage from './pages/ClientsPage';
+import ClientDetailPage from './pages/ClientDetailPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -48,6 +50,8 @@ export default function App() {
       >
         {/* Main pages */}
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/clients" element={<ClientsPage />} />
+        <Route path="/clients/:clientId" element={<ClientDetailPage />} />
         <Route path="/devices" element={<DevicesPage />} />
         <Route path="/users" element={<AdminRoute><UsersPage /></AdminRoute>} />
         <Route path="/audit" element={<AdminRoute><AuditPage /></AdminRoute>} />
