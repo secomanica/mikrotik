@@ -1,0 +1,25 @@
+{
+  "name": "webgate-rdp",
+  "version": "1.0.0",
+  "description": "Modern web-based RDP gateway - TSPlus replacement",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client",
+    "shared"
+  ],
+  "scripts": {
+    "build": "npm run build:shared && npm run build:server && npm run build:client",
+    "build:shared": "cd shared && npx tsc",
+    "build:server": "cd server && npx tsc",
+    "build:client": "cd client && npx vite build",
+    "dev:server": "cd server && npx ts-node-dev --respawn src/index.ts",
+    "dev:client": "cd client && npx vite",
+    "start": "node server/dist/index.js",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
