@@ -4,9 +4,8 @@
 
 - **Sistema Operacional**: Windows Server 2016+ (com Remote Desktop Services habilitado)
 - **Node.js**: 18+ LTS
-- **FreeRDP**: wfreerdp.exe no PATH (v2.0+ ou v3.0+)
-- **GhostScript**: gswin64c.exe no PATH (para impressão virtual)
-- **Portas**: 8443 (web), 3389 (RDP local)
+- **GhostScript**: gswin64c.exe no PATH (opcional, para impressão virtual)
+- **Portas**: 8443 (web), 3389 (RDP local - já habilitado nativamente)
 
 ## Instalação Passo a Passo
 
@@ -29,13 +28,14 @@ powershell -ExecutionPolicy Bypass -File .\server\scripts\setup-remoteapp.ps1 -E
 # Instalar Node.js 18+ LTS
 # Download: https://nodejs.org/
 
-# Instalar FreeRDP
-# Download: https://github.com/FreeRDP/FreeRDP/releases
-# Extrair wfreerdp.exe para C:\Program Files\FreeRDP\ e adicionar ao PATH
-
-# Instalar GhostScript
+# Instalar GhostScript (opcional - apenas se precisar de impressão via browser)
 # Download: https://www.ghostscript.com/releases/gsdnld.html
+# Adicionar ao PATH: C:\Program Files\gs\gs10.03.0\bin
 ```
+
+> **Nota:** Não é necessário instalar nenhum cliente RDP externo.
+> O WebGate se conecta diretamente ao serviço RDP nativo do Windows (localhost:3389)
+> usando o protocolo MS-RDPBCGR via socket TCP.
 
 ### 3. Instalar WebGate RDP
 
@@ -96,7 +96,6 @@ Abra o navegador em: `https://seu-servidor:8443`
 | `SESSION_SECRET` | Segredo para JWT | (alterar!) |
 | `SESSION_TIMEOUT` | Timeout da sessão (ms) | `3600000` |
 | `MAX_SESSIONS` | Máximo de sessões simultâneas | `50` |
-| `FREERDP_PATH` | Caminho do wfreerdp | `wfreerdp` |
 | `GHOSTSCRIPT_PATH` | Caminho do GhostScript | `gswin64c` |
 | `LOG_LEVEL` | Nível de log | `info` |
 
@@ -143,9 +142,10 @@ Internet/LAN
 - Verifique se o usuário tem permissão de Remote Desktop
 - Execute: `net localgroup "Remote Desktop Users" USUARIO /add`
 
-### FreeRDP não conecta
+### RDP não conecta
 - Verifique se o serviço RDP está rodando: `sc query TermService`
-- Teste manualmente: `wfreerdp /v:127.0.0.1 /u:USUARIO /p:SENHA`
+- Verifique se a porta 3389 está escutando: `netstat -an | findstr 3389`
+- Teste conexão local: `mstsc /v:127.0.0.1`
 
 ### Impressão não funciona
 - Verifique se GhostScript está no PATH: `gswin64c --version`

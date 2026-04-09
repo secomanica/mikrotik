@@ -19,16 +19,16 @@ A modern, self-contained web-based RDP gateway that replaces TSPlus. Provides br
 │  ┌─────────────────────────────────────────────────┐    │
 │  │              WebGate Server (Node.js)            │    │
 │  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐ │    │
-│  │  │  Auth  │ │  RDP   │ │  File  │ │  Print   │ │    │
-│  │  │ Module │ │ Proxy  │ │Transfer│ │ Handler  │ │    │
+│  │  │  Auth  │ │Native  │ │  File  │ │  Print   │ │    │
+│  │  │ Module │ │RDP TCP │ │Transfer│ │ Handler  │ │    │
 │  │  └───┬────┘ └───┬────┘ └───┬────┘ └────┬─────┘ │    │
 │  └──────┼──────────┼──────────┼────────────┼───────┘    │
 │         │          │          │            │             │
 │         ▼          ▼          ▼            ▼             │
 │  ┌─────────┐ ┌──────────┐ ┌───────┐ ┌──────────────┐   │
-│  │ Windows │ │ RDP Svc  │ │ User  │ │ Virtual PDF  │   │
-│  │  Auth   │ │ :3389    │ │ Dirs  │ │   Printer    │   │
-│  │ (NTLM)  │ │(localhost)│ │       │ │ (GhostScript)│   │
+│  │ Windows │ │ Native   │ │ User  │ │ Virtual PDF  │   │
+│  │  Auth   │ │ RDP :3389│ │ Dirs  │ │   Printer    │   │
+│  │ (NTLM)  │ │(TCP sock)│ │       │ │ (GhostScript)│   │
 │  └─────────┘ └──────────┘ └───────┘ └──────────────┘   │
 │                Windows Server Host                       │
 └─────────────────────────────────────────────────────────┘
@@ -47,18 +47,17 @@ A modern, self-contained web-based RDP gateway that replaces TSPlus. Provides br
 
 - **Backend**: Node.js + TypeScript + Express + ws (WebSocket)
 - **Frontend**: React + TypeScript + Vite
-- **RDP Engine**: FreeRDP (via child process) with bitmap streaming over WebSocket
+- **RDP Engine**: Native RDP protocol (MS-RDPBCGR) via TCP socket to localhost:3389
 - **Print**: Virtual PostScript printer + GhostScript → PDF
-- **Auth**: Windows NTLM authentication via `node-sspi` / `win-sso`
+- **Auth**: Windows NTLM authentication via PowerShell LogonUser API
 
 ## Quick Start
 
 ### Prerequisites
 
-- Windows Server 2016+ with RDP enabled
+- Windows Server 2016+ with RDP enabled (localhost:3389)
 - Node.js 18+ LTS
-- FreeRDP (`xfreerdp` or `wfreerdp`) installed and in PATH
-- GhostScript (for print redirection)
+- GhostScript (optional, for print redirection)
 
 ### Installation
 

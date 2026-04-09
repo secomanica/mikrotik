@@ -25,7 +25,6 @@ export const config: ServerConfig = {
   printSpoolDir: path.resolve(env('PRINT_SPOOL_DIR', './print-spool')),
   fileTransferDir: path.resolve(env('FILE_TRANSFER_DIR', './file-transfer')),
   ghostscriptPath: env('GHOSTSCRIPT_PATH', 'gswin64c'),
-  freerdpPath: env('FREERDP_PATH', 'wfreerdp'),
   dataDir: path.resolve(env('DATA_DIR', './data')),
   logLevel: env('LOG_LEVEL', 'info') as ServerConfig['logLevel'],
 };

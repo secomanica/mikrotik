@@ -202,7 +202,6 @@ export interface ServerConfig {
   printSpoolDir: string;
   fileTransferDir: string;
   ghostscriptPath: string;
-  freerdpPath: string;
   dataDir: string;
   logLevel: 'debug' | 'info' | 'warn' | 'error';
 }
